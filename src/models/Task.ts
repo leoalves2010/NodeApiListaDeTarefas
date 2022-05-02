@@ -1,13 +1,13 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../instances/mysql';
 
-export interface iTodo extends Model {
+export interface iTask extends Model {
     id: number,
     title: string,
     done: number
 }
 
-export const Todo = sequelize.define<iTodo>('Todo', {
+export const Task = sequelize.define<iTask>('Task', {
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true,
@@ -24,6 +24,6 @@ export const Todo = sequelize.define<iTodo>('Todo', {
         defaultValue: 0
     }
 }, {
-    tableName: 'todos',
+    tableName: 'tasks',
     timestamps: false
 });

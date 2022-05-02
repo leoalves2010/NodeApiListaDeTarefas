@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-import * as todoController from '../controllers/todoController';
+import * as taskController from '../controllers/taskController';
 
 const router = Router();
 
-router.get('/todos', todoController.getAllTodos);
-router.post('/todo', todoController.createTodo);
-router.get('/todo/:id', todoController.getOneTodo);
-router.put('/todo/:id', todoController.updateTodo);
-router.delete('/todo/:id', todoController.deleteTodo);
+router.get('/tasks', taskController.getAllTasks);
+router.post('/task', taskController.createTask);
+router.get('/task/:id', taskController.getOneTask);
+router.put('/task/:id', taskController.updateTask);
+router.delete('/task/:id', taskController.deleteTask);
 
 export default router;
