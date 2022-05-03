@@ -51,7 +51,48 @@ export const getAllTasks = async (req: Request, res: Response) => {
 }
 
 export const getOneTask = async (req: Request, res: Response) => {
-    
+    let task = await Task.findByPk(req.params.id);
+
+    if(task){
+        res.status(200).json({
+            task,
+            links: [
+                {
+                    type: "GET",
+                    rel: "get_one_task_by_id",
+                    uri: `http://localhost:4000/task/${task.id}`
+                },
+                {
+                    type: "PUT",
+                    rel: "update_task",
+                    uri: `http://localhost:4000/task/${task.id}`
+                },
+                {
+                    type: "DELETE",
+                    rel: "delete_task",
+                    uri: `http://localhost:4000/task/${task.id}`
+                }
+            ]
+        });
+    }else{
+        res.status(404).json({
+            tasks: {
+                msg: "Task does not exist in the database."
+            },
+            links: [
+                {
+                    type: "POST",
+                    rel: "add_task",
+                    uri: 'http://localhost:4000/task'
+                },
+                {
+                    type: "GET",
+                    rel: "get_all_tasks",
+                    uri: `http://localhost:4000/tasks`
+                }
+            ]
+        });
+    }
 }
 
 export const createTask = async (req: Request, res: Response) => {
@@ -88,7 +129,10 @@ export const createTask = async (req: Request, res: Response) => {
     }else{
         res.status(422).json({
             tasks: {
-                msg: "Error. Fill in the data correctly."
+                msg: "Error. Fill in the data correctly.",
+                required_fields: {
+                    title: 'string'
+                }
             },
             links: [
                 {
