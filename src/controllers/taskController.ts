@@ -102,7 +102,58 @@ export const createTask = async (req: Request, res: Response) => {
 }
 
 export const updateTask = async (req: Request, res: Response) => {
-    
+    if(req.params.id){
+        let task = await Task.findByPk(req.params.id);
+
+        if(task){
+            if(req.body.title){
+                task.title = req.body.title;
+            }
+
+            if(req.body.done){
+                switch(req.body.done.toLowerCase()) {
+                    case 'true':
+                    case '1':
+                        task.done = 1;
+                        break;
+                    case 'false':
+                    case '0':
+                        task.done = 0;
+                        break;       
+                }
+            }
+            await task.save();
+            res.status(200).json({
+                msg: "Task updated successfully.",
+                task,
+                links: [
+                    {
+                        type: "GET",
+                        rel: "get_one_task_by_id",
+                        uri: `http://localhost:4000/task/${task.id}`
+                    },
+                    {
+                        type: "PUT",
+                        rel: "update_task",
+                        uri: `http://localhost:4000/task/${task.id}`
+                    },
+                    {
+                        type: "DELETE",
+                        rel: "delete_task",
+                        uri: `http://localhost:4000/task/${task.id}`
+                    }
+                ]
+            });
+        }else{
+            res.status(404).json({
+                msg: "Task not found in database."
+            });
+        }
+    }else{
+        res.status(422).json({
+            msg: "The 'id' parameter is incorrect and/or not sent in the request."
+        });
+    }
 }
 
 export const deleteTask = async (req: Request, res: Response) => {
