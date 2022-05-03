@@ -157,5 +157,16 @@ export const updateTask = async (req: Request, res: Response) => {
 }
 
 export const deleteTask = async (req: Request, res: Response) => {
+    let task = await Task.findByPk(req.params.id);
     
+    if(task){
+        await task.destroy();
+        res.status(200).json({
+            msg: "Task successfully removed."
+        });
+    }else{
+        res.status(404).json({
+            msg: "Task not found in database."
+        });
+    }
 }
